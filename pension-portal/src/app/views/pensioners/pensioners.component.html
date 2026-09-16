@@ -1,0 +1,103 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header class="d-flex align-items-center justify-content-between">
+        <strong>Pensioners</strong>
+        <span class="text-body-secondary small">{{ filteredPensioners().length }} record(s)</span>
+      </c-card-header>
+      <c-card-body>
+        <form [formGroup]="searchForm" class="row row-cols-lg-auto g-2 align-items-center mb-3">
+          <div class="col-12">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg cIcon name="cilSearch" size="sm"></svg>
+              </span>
+              <input
+                cFormControl
+                formControlName="search"
+                placeholder="Search by name, national ID, KRA PIN, pension number, phone or email"
+                type="search"
+              />
+            </c-input-group>
+          </div>
+          <div class="col-12">
+            <button (click)="clearSearch()" cButton color="secondary" type="button" variant="outline">
+              Clear
+            </button>
+          </div>
+        </form>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger" role="alert">{{ errorMessage() }}</div>
+        }
+
+        @if (loading()) {
+          <div class="d-flex justify-content-center py-5">
+            <c-spinner color="primary" />
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table [hover]="true" cTable>
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Full Name</th>
+                  <th scope="col">National ID</th>
+                  <th scope="col">KRA PIN</th>
+                  <th scope="col">Pension Number</th>
+                  <th scope="col">Phone Number</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Approval Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (pensioner of pagedPensioners(); track pensioner.id; let i = $index) {
+                  <tr>
+                    <th scope="row">{{ (currentPage() - 1) * pageSize + i + 1 }}</th>
+                    <td>{{ pensioner.fullName }}</td>
+                    <td>{{ pensioner.nationalId }}</td>
+                    <td>{{ pensioner.kraPin }}</td>
+                    <td>{{ pensioner.pensionNumber }}</td>
+                    <td>{{ pensioner.phoneNumber }}</td>
+                    <td>
+                      <c-badge [color]="pensioner.status === 'ALIVE' ? 'success' : 'secondary'">
+                        {{ pensioner.status }}
+                      </c-badge>
+                    </td>
+                    <td>
+                      <c-badge [color]="pensioner.approvalStatus === 'ACTIVE' ? 'success' : 'warning'">
+                        {{ pensioner.approvalStatus }}
+                      </c-badge>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="text-center text-body-secondary py-4" colspan="8">
+                      No pensioners found.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (totalPages() > 1) {
+            <c-pagination aria-label="Pensioners pagination" class="justify-content-end mt-3">
+              <c-page-item [disabled]="currentPage() === 1">
+                <a (click)="goToPage(currentPage() - 1)" cPageLink style="cursor: pointer">Previous</a>
+              </c-page-item>
+              @for (page of pageNumbers(); track page) {
+                <c-page-item [active]="page === currentPage()">
+                  <a (click)="goToPage(page)" cPageLink style="cursor: pointer">{{ page }}</a>
+                </c-page-item>
+              }
+              <c-page-item [disabled]="currentPage() === totalPages()">
+                <a (click)="goToPage(currentPage() + 1)" cPageLink style="cursor: pointer">Next</a>
+              </c-page-item>
+            </c-pagination>
+          }
+        }
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

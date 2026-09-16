@@ -1,0 +1,110 @@
+<c-row class="g-4">
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a color="primary" title="Total Pensioners">
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ stats().totalPensioners | number }}
+      </ng-template>
+      <ng-template cTemplateId="widgetChartTemplate">
+        <div class="mt-3 mx-3 text-white-50">
+          <svg cIcon name="cilPeople" size="xl"></svg>
+        </div>
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a color="info" title="New Enrollments">
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ stats().newEnrollments | number }}
+      </ng-template>
+      <ng-template cTemplateId="widgetChartTemplate">
+        <div class="mt-3 mx-3 text-white-50">
+          <svg cIcon name="cilUserFollow" size="xl"></svg>
+        </div>
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a color="warning" title="Pending Enrollments">
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ stats().pendingEnrollments | number }}
+      </ng-template>
+      <ng-template cTemplateId="widgetChartTemplate">
+        <div class="mt-3 mx-3 text-white-50">
+          <svg cIcon name="cilTask" size="xl"></svg>
+        </div>
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a color="success" title="Completed Enrollments">
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ stats().completedEnrollments | number }}
+      </ng-template>
+      <ng-template cTemplateId="widgetChartTemplate">
+        <div class="mt-3 mx-3 text-white-50">
+          <svg cIcon name="cilCheck" size="xl"></svg>
+        </div>
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+</c-row>
+
+<c-card class="my-4">
+  <c-card-body>
+    <c-row>
+      <c-col sm="5">
+        <h4 class="card-title mb-0" id="traffic">Enrollments</h4>
+        <div class="small text-body-secondary">New pensioner enrollments over time</div>
+      </c-col>
+      <c-col class="d-none d-md-block" sm="7">
+        <form [formGroup]="trafficRadioGroup">
+          <c-button-group class="float-end me-3" role="group">
+            <input class="btn-check" formControlName="trafficRadio" type="radio" value="Day" id="dayRadio" />
+            <label (click)="setTrafficPeriod('Day')" cButton cFormCheckLabel color="secondary" variant="outline"
+              for="dayRadio">
+              Day
+            </label>
+            <input class="btn-check" formControlName="trafficRadio" type="radio" value="Week" id="radioWeek" />
+            <label (click)="setTrafficPeriod('Week')" cButton cFormCheckLabel color="secondary" variant="outline"
+              for="radioWeek">
+              Week
+            </label>
+            <input class="btn-check" formControlName="trafficRadio" type="radio" value="Month" id="radioMonth" />
+            <label (click)="setTrafficPeriod('Month')" cButton cFormCheckLabel color="secondary" variant="outline"
+              for="radioMonth">
+              Month
+            </label>
+          </c-button-group>
+        </form>
+      </c-col>
+    </c-row>
+    <c-chart [data]="mainChart.data" [height]="300" [style.marginTop.px]="40" [options]="mainChart.options"
+      [type]="mainChart.type" (chartRef)="handleChartRef($event)">
+      Main chart
+    </c-chart>
+  </c-card-body>
+  <c-card-footer>
+    <c-row class="text-center mb-2" [xl]="3" [sm]="3" [xs]="1" [gutter]="4">
+      <c-col>
+        <div class="text-body-secondary">New Enrollments</div>
+        <strong>{{ stats().newEnrollments | number }} of {{ stats().totalPensioners | number }}</strong>
+        <c-progress class="mt-2" thin color="info" [value]="(stats().newEnrollments / stats().totalPensioners) * 100"
+          aria-label="New enrollments" />
+      </c-col>
+      <c-col>
+        <div class="text-body-secondary">Pending Enrollments</div>
+        <strong>{{ stats().pendingEnrollments | number }} of {{ stats().totalPensioners | number }}</strong>
+        <c-progress class="mt-2" thin color="warning"
+          [value]="(stats().pendingEnrollments / stats().totalPensioners) * 100" aria-label="Pending enrollments" />
+      </c-col>
+      <c-col>
+        <div class="text-body-secondary">Completed Enrollments</div>
+        <strong>{{ stats().completedEnrollments | number }} of {{ stats().totalPensioners | number }}</strong>
+        <c-progress class="mt-2" thin color="success"
+          [value]="(stats().completedEnrollments / stats().totalPensioners) * 100" aria-label="Completed enrollments" />
+      </c-col>
+    </c-row>
+  </c-card-footer>
+</c-card>
+
+<app-transactions />

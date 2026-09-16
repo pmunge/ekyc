@@ -1,0 +1,68 @@
+<div class="login-layout">
+
+  <!-- Left: form panel -->
+  <section class="login-panel">
+    <header class="brand">
+      <img src="assets/images/loginlogo.png" alt="ICEA Pay" class="brand-logo">
+    </header>
+
+    <div class="form-wrap">
+      <img src="assets/images/iCEA_PAY.png" alt="ICEA Pay" class="product-logo">
+      <p class="subtitle">
+        Enter the one-time password sent to
+        @if (maskedPhoneNumber()) {
+          <strong>{{ maskedPhoneNumber() }}</strong>
+        } @else {
+          your phone
+        }
+      </p>
+
+      <form [formGroup]="otpForm" (ngSubmit)="submit()" class="login-form" novalidate>
+
+        <label class="field">
+          <span class="field-label">One-time code</span>
+          <input
+            type="text"
+            formControlName="code"
+            placeholder="Enter code"
+            inputmode="numeric"
+            maxlength="8"
+            autocomplete="one-time-code"
+          >
+          @if (otpForm.controls.code.touched && otpForm.controls.code.invalid) {
+            <span class="field-error">Enter the numeric code you received</span>
+          }
+        </label>
+
+        @if (errorMessage()) {
+          <p class="form-error">{{ errorMessage() }}</p>
+        }
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          {{ loading() ? 'Verifying…' : 'Verify' }}
+        </button>
+
+        <button type="button" class="btn btn-secondary" (click)="cancel()">
+          Back to login
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- Right: image panel -->
+  <aside class="image-panel">
+    <img src="assets/images/login.png" alt="ICEA Lion headquarters" class="image-panel-bg">
+    <div class="image-overlay">
+      <span class="overlay-top">ICEA LION</span>
+      <div class="overlay-bottom">
+        <h2 class="overlay-heading">ICEA PAY</h2>
+        <p class="overlay-text">
+          Manage pensioner enrollments, transactions and approvals across the
+          group from a single secure dashboard.
+        </p>
+      </div>
+    </div>
+  </aside>
+
+</div>

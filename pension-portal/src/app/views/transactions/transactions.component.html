@@ -1,0 +1,92 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header class="d-flex align-items-center justify-content-between">
+        <strong>Transactions</strong>
+        <span class="text-body-secondary small">{{ filteredTransactions().length }} record(s)</span>
+      </c-card-header>
+      <c-card-body>
+        <form [formGroup]="filterForm" class="row row-cols-lg-auto g-2 align-items-center mb-3">
+          <div class="col-12">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg cIcon name="cilSearch" size="sm"></svg>
+              </span>
+              <input
+                cFormControl
+                formControlName="search"
+                placeholder="Search by reference, pensioner, pension number or status"
+                type="search"
+              />
+            </c-input-group>
+          </div>
+          <div class="col-12">
+            <select aria-label="Filter by period" cSelect formControlName="period">
+              @for (option of periodOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-12">
+            <button (click)="clearFilters()" cButton color="secondary" type="button" variant="outline">
+              Clear
+            </button>
+          </div>
+        </form>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger" role="alert">{{ errorMessage() }}</div>
+        }
+
+        @if (loading()) {
+          <div class="d-flex justify-content-center py-5">
+            <c-spinner color="primary" />
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table [hover]="true" cTable>
+              <thead>
+                <tr>
+                  <th scope="col">Reference</th>
+                  <th scope="col">Pensioner</th>
+                  <th scope="col">Pension Number</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Reason</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Requested By</th>
+                  <th scope="col">Approved By</th>
+                  <th scope="col">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (transaction of filteredTransactions(); track transaction.id) {
+                  <tr>
+                    <td>{{ transaction.reference }}</td>
+                    <td>{{ transaction.pensionerName }}</td>
+                    <td>{{ transaction.pensionNumber }}</td>
+                    <td>{{ transaction.amount | number: '1.2-2' }}</td>
+                    <td>{{ transaction.reason }}</td>
+                    <td>
+                      <c-badge [color]="statusColor(transaction.status)">
+                        {{ transaction.status }}
+                      </c-badge>
+                    </td>
+                    <td>{{ transaction.requestedByName }}</td>
+                    <td>{{ transaction.approvedByName || '—' }}</td>
+                    <td>{{ transaction.createdAt | date: 'medium' }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="text-center text-body-secondary py-4" colspan="9">
+                      No transactions found.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
