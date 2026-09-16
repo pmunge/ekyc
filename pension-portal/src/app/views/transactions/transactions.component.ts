@@ -56,6 +56,8 @@ export class TransactionsComponent implements OnInit {
   private readonly transactionsService = inject(TransactionsService);
   private readonly fb = inject(FormBuilder);
 
+  readonly pageSizeOptions = [5, 10, 25];
+
   readonly periodOptions: { value: Period; label: string }[] = [
     { value: 'all', label: 'All time' },
     { value: 'hourly', label: 'Hourly (last 1 hour)' },
@@ -73,6 +75,8 @@ export class TransactionsComponent implements OnInit {
   private readonly period = signal<Period>('all');
   readonly loading = signal(false);
   readonly errorMessage = signal('');
+  readonly currentPage = signal(1);
+  readonly pageSize = signal(10);
 
   readonly filteredTransactions = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
@@ -98,15 +102,30 @@ export class TransactionsComponent implements OnInit {
     });
   });
 
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filteredTransactions().length / this.pageSize())));
+
+  readonly pagedTransactions = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return this.filteredTransactions().slice(start, start + this.pageSize());
+  });
+
+  readonly totalItems = computed(() => this.filteredTransactions().length);
+
+  readonly rangeStart = computed(() => (this.totalItems() === 0 ? 0 : (this.currentPage() - 1) * this.pageSize() + 1));
+
+  readonly rangeEnd = computed(() => Math.min(this.currentPage() * this.pageSize(), this.totalItems()));
+
   ngOnInit(): void {
     this.loadTransactions();
 
     this.filterForm.controls.search.valueChanges.subscribe((value) => {
       this.searchTerm.set(value ?? '');
+      this.currentPage.set(1);
     });
 
     this.filterForm.controls.period.valueChanges.subscribe((value) => {
       this.period.set(value ?? 'all');
+      this.currentPage.set(1);
     });
   }
 
@@ -129,6 +148,19 @@ export class TransactionsComponent implements OnInit {
 
   clearFilters(): void {
     this.filterForm.reset({ search: '', period: 'all' });
+    this.currentPage.set(1);
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: string): void {
+    this.pageSize.set(Number(size));
+    this.currentPage.set(1);
   }
 
   statusColor(status: string): string {

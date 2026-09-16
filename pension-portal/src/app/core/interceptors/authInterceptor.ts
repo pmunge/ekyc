@@ -8,7 +8,10 @@ import { AuthService } from '../services/auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(AuthService).getToken();
 
-  const isApiRequest = req.url.startsWith(environment.apiUrl) || req.url.startsWith(environment.adminApiUrl);
+  const isApiRequest =
+    req.url.startsWith(environment.apiUrl) ||
+    req.url.startsWith(environment.adminApiUrl) ||
+    req.url.startsWith(environment.advancesApiUrl);
 
   if (!token || !isApiRequest) {
     return next(req);

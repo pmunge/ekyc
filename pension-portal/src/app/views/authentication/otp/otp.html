@@ -9,33 +9,22 @@
     <div class="form-wrap">
       <img src="assets/images/iCEA_PAY.png" alt="ICEA Pay" class="product-logo">
       <p class="subtitle">
-        Enter the one-time password sent to
-        @if (maskedPhoneNumber()) {
-          <strong>{{ maskedPhoneNumber() }}</strong>
-        } @else {
-          your phone
-        }
+        Enter the one-time password sent to your email
       </p>
 
       <form [formGroup]="otpForm" (ngSubmit)="submit()" class="login-form" novalidate>
 
         <label class="field">
           <span class="field-label">One-time code</span>
-          <input
-            type="text"
-            formControlName="code"
-            placeholder="Enter code"
-            inputmode="numeric"
-            maxlength="8"
-            autocomplete="one-time-code"
-          >
+          <input type="text" formControlName="code" placeholder="Enter code" inputmode="numeric" maxlength="8"
+            autocomplete="one-time-code">
           @if (otpForm.controls.code.touched && otpForm.controls.code.invalid) {
-            <span class="field-error">Enter the numeric code you received</span>
+          <span class="field-error">Enter the numeric code you received</span>
           }
         </label>
 
         @if (errorMessage()) {
-          <p class="form-error">{{ errorMessage() }}</p>
+        <p class="form-error">{{ errorMessage() }}</p>
         }
 
         <button type="submit" class="btn btn-primary" [disabled]="loading()">

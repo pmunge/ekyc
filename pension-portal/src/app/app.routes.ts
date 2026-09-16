@@ -4,7 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'authentication',
     pathMatch: 'full'
   },
   {
@@ -35,10 +35,7 @@ export const routes: Routes = [
       },
       {
         path: 'workflows',
-        loadComponent: () => import('./views/workflows/workflows.component').then((m) => m.WorkflowsComponent),
-        data: {
-          title: 'Workflows'
-        }
+        loadChildren: () => import('./views/workflows/routes').then((m) => m.routes)
       },
       {
         path: 'components',

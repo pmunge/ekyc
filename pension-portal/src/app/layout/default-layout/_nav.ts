@@ -26,8 +26,17 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Workflows',
-    url: '/workflows',
-    iconComponent: { name: 'cil-task' }
+    iconComponent: { name: 'cil-task' },
+    children: [
+      {
+        name: 'Approve Member',
+        url: '/workflows/approve-members'
+      },
+      {
+        name: 'Approve Transaction',
+        url: '/workflows/approve-transactions'
+      }
+    ]
   },
 
 ];

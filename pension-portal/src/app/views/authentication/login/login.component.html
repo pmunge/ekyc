@@ -14,9 +14,9 @@
 
         <label class="field">
           <span class="field-label">Phone number</span>
-          <input type="tel" formControlName="phoneNumber" placeholder="e.g. 0712345678" autocomplete="tel">
+          <input type="tel" formControlName="phoneNumber" placeholder=" +254*********" autocomplete="tel">
           @if (loginForm.controls.phoneNumber.touched && loginForm.controls.phoneNumber.invalid) {
-            <span class="field-error">Enter a valid phone number</span>
+          <span class="field-error">Enter a valid phone number</span>
           }
         </label>
 
@@ -24,12 +24,12 @@
           <span class="field-label">Password</span>
           <input type="password" formControlName="password" placeholder="••••••••••" autocomplete="current-password">
           @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
-            <span class="field-error">Password is required</span>
+          <span class="field-error">Password is required</span>
           }
         </label>
 
         @if (errorMessage()) {
-          <p class="form-error">{{ errorMessage() }}</p>
+        <p class="form-error">{{ errorMessage() }}</p>
         }
 
         <button type="submit" class="btn btn-primary" [disabled]="loading()">

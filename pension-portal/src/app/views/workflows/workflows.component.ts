@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import Swal from 'sweetalert2';
 import {
   BadgeComponent,
@@ -7,6 +7,7 @@ import {
   CardComponent,
   CardHeaderComponent,
   ColComponent,
+  FormSelectDirective,
   RowComponent,
   SpinnerComponent,
   TableDirective,
@@ -26,6 +27,7 @@ import { WorkflowService } from '../../core/services/workflow.service';
     CardBodyComponent,
     TableDirective,
     ButtonDirective,
+    FormSelectDirective,
     BadgeComponent,
     SpinnerComponent,
   ],
@@ -33,13 +35,42 @@ import { WorkflowService } from '../../core/services/workflow.service';
 export class WorkflowsComponent implements OnInit {
   private readonly workflowService = inject(WorkflowService);
 
+  readonly pageSizeOptions = [5, 10, 25];
+
   readonly pendingApprovals = signal<PendingApproval[]>([]);
   readonly loading = signal(false);
   readonly errorMessage = signal('');
   readonly approvingId = signal<number | null>(null);
+  readonly currentPage = signal(1);
+  readonly pageSize = signal(10);
+
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.pendingApprovals().length / this.pageSize())));
+
+  readonly pagedApprovals = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return this.pendingApprovals().slice(start, start + this.pageSize());
+  });
+
+  readonly totalItems = computed(() => this.pendingApprovals().length);
+
+  readonly rangeStart = computed(() => (this.totalItems() === 0 ? 0 : (this.currentPage() - 1) * this.pageSize() + 1));
+
+  readonly rangeEnd = computed(() => Math.min(this.currentPage() * this.pageSize(), this.totalItems()));
 
   ngOnInit(): void {
     this.loadPendingApprovals();
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: string): void {
+    this.pageSize.set(Number(size));
+    this.currentPage.set(1);
   }
 
   loadPendingApprovals(): void {

@@ -53,7 +53,7 @@
               <tbody>
                 @for (pensioner of pagedPensioners(); track pensioner.id; let i = $index) {
                   <tr>
-                    <th scope="row">{{ (currentPage() - 1) * pageSize + i + 1 }}</th>
+                    <th scope="row">{{ (currentPage() - 1) * pageSize() + i + 1 }}</th>
                     <td>{{ pensioner.fullName }}</td>
                     <td>{{ pensioner.nationalId }}</td>
                     <td>{{ pensioner.kraPin }}</td>
@@ -81,21 +81,45 @@
             </table>
           </div>
 
-          @if (totalPages() > 1) {
-            <c-pagination aria-label="Pensioners pagination" class="justify-content-end mt-3">
-              <c-page-item [disabled]="currentPage() === 1">
-                <a (click)="goToPage(currentPage() - 1)" cPageLink style="cursor: pointer">Previous</a>
-              </c-page-item>
-              @for (page of pageNumbers(); track page) {
-                <c-page-item [active]="page === currentPage()">
-                  <a (click)="goToPage(page)" cPageLink style="cursor: pointer">{{ page }}</a>
-                </c-page-item>
+          <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mt-3">
+            <span class="text-body-secondary small">Items per page:</span>
+            <select
+              (change)="onPageSizeChange($any($event.target).value)"
+              [value]="pageSize()"
+              aria-label="Items per page"
+              cSelect
+              class="w-auto"
+            >
+              @for (size of pageSizeOptions; track size) {
+                <option [value]="size">{{ size }}</option>
               }
-              <c-page-item [disabled]="currentPage() === totalPages()">
-                <a (click)="goToPage(currentPage() + 1)" cPageLink style="cursor: pointer">Next</a>
-              </c-page-item>
-            </c-pagination>
-          }
+            </select>
+            <span class="text-body-secondary small">{{ rangeStart() }}&ndash;{{ rangeEnd() }} of {{ totalItems() }}</span>
+            <button
+              (click)="goToPage(currentPage() - 1)"
+              [disabled]="currentPage() === 1"
+              aria-label="Previous page"
+              cButton
+              color="secondary"
+              size="sm"
+              type="button"
+              variant="ghost"
+            >
+              &lsaquo;
+            </button>
+            <button
+              (click)="goToPage(currentPage() + 1)"
+              [disabled]="currentPage() === totalPages()"
+              aria-label="Next page"
+              cButton
+              color="secondary"
+              size="sm"
+              type="button"
+              variant="ghost"
+            >
+              &rsaquo;
+            </button>
+          </div>
         }
       </c-card-body>
     </c-card>

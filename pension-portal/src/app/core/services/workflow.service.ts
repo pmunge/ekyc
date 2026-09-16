@@ -30,4 +30,15 @@ export class WorkflowService {
       .post<ApiResponse<void> | void>(`${environment.adminApiUrl}/enrollments/${enrollmentId}/approve`, {})
       .pipe(map(() => undefined));
   }
+  getPendingTransactionsApprovals(): Observable<PendingApproval[]> {
+    return this.http
+      .get<ApiResponse<PendingApproval[]> | PendingApproval[]>(this.apiUrl)
+      .pipe(map((res) => (Array.isArray(res) ? res : res.data)));
+  }
+
+  approveTransactionRequest(transactionId: number): Observable<void> {
+    return this.http
+      .post<ApiResponse<void> | void>(`${environment.advancesApiUrl}/${transactionId}/approve`, {})
+      .pipe(map(() => undefined));
+  }
 }

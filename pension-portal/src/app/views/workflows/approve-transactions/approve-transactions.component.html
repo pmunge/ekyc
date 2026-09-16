@@ -2,38 +2,10 @@
   <c-col xs="12">
     <c-card class="mb-4">
       <c-card-header class="d-flex align-items-center justify-content-between">
-        <strong>Transactions</strong>
-        <span class="text-body-secondary small">{{ filteredTransactions().length }} record(s)</span>
+        <strong>Pending Transactions</strong>
+        <span class="text-body-secondary small">{{ pendingTransactions().length }} record(s)</span>
       </c-card-header>
       <c-card-body>
-        <form [formGroup]="filterForm" class="row row-cols-lg-auto g-2 align-items-center mb-3">
-          <div class="col-12">
-            <c-input-group>
-              <span cInputGroupText>
-                <svg cIcon name="cilSearch" size="sm"></svg>
-              </span>
-              <input
-                cFormControl
-                formControlName="search"
-                placeholder="Search by reference, pensioner, pension number or status"
-                type="search"
-              />
-            </c-input-group>
-          </div>
-          <div class="col-12">
-            <select aria-label="Filter by period" cSelect formControlName="period">
-              @for (option of periodOptions; track option.value) {
-                <option [value]="option.value">{{ option.label }}</option>
-              }
-            </select>
-          </div>
-          <div class="col-12">
-            <button (click)="clearFilters()" cButton color="secondary" type="button" variant="outline">
-              Clear
-            </button>
-          </div>
-        </form>
-
         @if (errorMessage()) {
           <div class="alert alert-danger" role="alert">{{ errorMessage() }}</div>
         }
@@ -57,6 +29,7 @@
                   <th scope="col">Reason</th>
                   <th scope="col">Status</th>
                   <th scope="col">Requested By</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -71,16 +44,26 @@
                     <td>{{ transaction.amount | number: '1.2-2' }}</td>
                     <td>{{ transaction.reason }}</td>
                     <td>
-                      <c-badge [color]="statusColor(transaction.status)">
-                        {{ transaction.status }}
-                      </c-badge>
+                      <c-badge color="warning">{{ transaction.status }}</c-badge>
                     </td>
                     <td>{{ transaction.requestedByName }}</td>
+                    <td>
+                      <button
+                        (click)="approve(transaction)"
+                        [disabled]="approvingId() === transaction.id"
+                        cButton
+                        color="success"
+                        size="sm"
+                        type="button"
+                      >
+                        {{ approvingId() === transaction.id ? 'Approving...' : 'Approve' }}
+                      </button>
+                    </td>
                   </tr>
                 } @empty {
                   <tr>
-                    <td class="text-center text-body-secondary py-4" colspan="10">
-                      No transactions found.
+                    <td class="text-center text-body-secondary py-4" colspan="11">
+                      No pending transactions.
                     </td>
                   </tr>
                 }

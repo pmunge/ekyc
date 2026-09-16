@@ -8,11 +8,9 @@ import {
   CardHeaderComponent,
   ColComponent,
   FormControlDirective,
+  FormSelectDirective,
   InputGroupComponent,
   InputGroupTextDirective,
-  PageItemComponent,
-  PageLinkDirective,
-  PaginationComponent,
   RowComponent,
   SpinnerComponent,
   TableDirective,
@@ -36,10 +34,8 @@ import { PensionsService } from '../../core/services/pensions.service';
     InputGroupComponent,
     InputGroupTextDirective,
     FormControlDirective,
+    FormSelectDirective,
     ButtonDirective,
-    PaginationComponent,
-    PageItemComponent,
-    PageLinkDirective,
     BadgeComponent,
     SpinnerComponent,
     IconDirective,
@@ -49,7 +45,7 @@ export class PensionersComponent implements OnInit {
   private readonly pensionsService = inject(PensionsService);
   private readonly fb = inject(FormBuilder);
 
-  readonly pageSize = 10;
+  readonly pageSizeOptions = [5, 10, 25];
 
   readonly searchForm = this.fb.nonNullable.group({
     search: [''],
@@ -60,6 +56,7 @@ export class PensionersComponent implements OnInit {
   readonly loading = signal(false);
   readonly errorMessage = signal('');
   readonly currentPage = signal(1);
+  readonly pageSize = signal(10);
 
   readonly filteredPensioners = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
@@ -81,14 +78,18 @@ export class PensionersComponent implements OnInit {
     );
   });
 
-  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filteredPensioners().length / this.pageSize)));
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filteredPensioners().length / this.pageSize())));
 
   readonly pagedPensioners = computed(() => {
-    const start = (this.currentPage() - 1) * this.pageSize;
-    return this.filteredPensioners().slice(start, start + this.pageSize);
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return this.filteredPensioners().slice(start, start + this.pageSize());
   });
 
-  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  readonly totalItems = computed(() => this.filteredPensioners().length);
+
+  readonly rangeStart = computed(() => (this.totalItems() === 0 ? 0 : (this.currentPage() - 1) * this.pageSize() + 1));
+
+  readonly rangeEnd = computed(() => Math.min(this.currentPage() * this.pageSize(), this.totalItems()));
 
   ngOnInit(): void {
     this.loadPensioners();
@@ -125,5 +126,10 @@ export class PensionersComponent implements OnInit {
       return;
     }
     this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: string): void {
+    this.pageSize.set(Number(size));
+    this.currentPage.set(1);
   }
 }
