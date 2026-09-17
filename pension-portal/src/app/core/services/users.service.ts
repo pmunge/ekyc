@@ -20,11 +20,12 @@ export class UsersService {
   private http = inject(HttpClient);
 
   private readonly apiUrl = `${environment.apiUrl}/staff`;
+  private readonly adminUsersUrl = `${environment.pensionEnrollmentsApiUrl}/admin-users`;
 
   getStaff(): Observable<Staff[]> {
     return this.http
-      .get<ApiResponse<Staff[]>>(this.apiUrl)
-      .pipe(map((res) => res.data));
+      .get<ApiResponse<Staff[]> | Staff[]>(this.adminUsersUrl)
+      .pipe(map((res) => (Array.isArray(res) ? res : res.data)));
   }
 
   /** Change this URL here when the dedicated create-user endpoint is available. */

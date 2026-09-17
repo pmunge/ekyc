@@ -1,5 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {
   BadgeComponent,
@@ -22,9 +22,7 @@ import {
 } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { Pensioner } from '../../core/models/pensioners';
-import { Advance } from '../../core/models/transactions';
 import { PensionsService } from '../../core/services/pensions.service';
-import { TransactionsService } from '../../core/services/transactions.service';
 import { ExportService } from '../../core/services/export.service';
 import { PensionerFormComponent } from './form/form.component';
 
@@ -33,8 +31,6 @@ import { PensionerFormComponent } from './form/form.component';
   styleUrl: './pensioners.component.scss',
   templateUrl: './pensioners.component.html',
   imports: [
-    DatePipe,
-    DecimalPipe,
     ReactiveFormsModule,
     RowComponent,
     ColComponent,
@@ -55,11 +51,11 @@ import { PensionerFormComponent } from './form/form.component';
     ModalTitleDirective,
     ModalBodyComponent,
     PensionerFormComponent,
+    DatePipe,
   ],
 })
 export class PensionersComponent implements OnInit {
   private readonly pensionsService = inject(PensionsService);
-  private readonly transactionsService = inject(TransactionsService);
   private readonly exportService = inject(ExportService);
   private readonly fb = inject(FormBuilder);
 
@@ -80,11 +76,8 @@ export class PensionersComponent implements OnInit {
   readonly detailsLoading = signal(false);
   readonly detailsError = signal('');
   readonly selectedPensioner = signal<Pensioner | null>(null);
-  readonly lastTransactionVisible = signal(false);
-  readonly lastTransactionLoading = signal(false);
-  readonly lastTransactionError = signal('');
-  readonly lastTransaction = signal<Advance | null>(null);
-  readonly lastTransactionPensioner = signal<Pensioner | null>(null);
+  readonly liveCheckVisible = signal(false);
+  readonly liveCheckPensioner = signal<Pensioner | null>(null);
 
   readonly filteredPensioners = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
@@ -185,41 +178,22 @@ export class PensionersComponent implements OnInit {
     });
   }
 
-  viewLastTransaction(pensioner: Pensioner): void {
-    this.lastTransactionPensioner.set(pensioner);
-    this.lastTransaction.set(null);
-    this.lastTransactionError.set('');
-    this.lastTransactionLoading.set(true);
-    this.lastTransactionVisible.set(true);
-
-    this.transactionsService.getLastTransactionForEnrollment(pensioner.id).subscribe({
-      next: (transaction) => {
-        this.lastTransaction.set(transaction);
-        this.lastTransactionLoading.set(false);
-      },
-      error: (error) => {
-        this.lastTransactionLoading.set(false);
-        if (error?.status === 404) {
-          this.lastTransaction.set(null);
-          return;
-        }
-        console.error('Failed to load last transaction', error);
-        this.lastTransactionError.set('Failed to load the last transaction. Please try again.');
-      },
-    });
+  viewLiveCheck(pensioner: Pensioner): void {
+    this.liveCheckPensioner.set(pensioner);
+    this.liveCheckVisible.set(true);
   }
 
-  transactionStatusColor(status: string): string {
-    switch (status.toUpperCase()) {
-      case 'APPROVED':
-        return 'success';
-      case 'REJECTED':
-        return 'danger';
-      case 'PENDING':
-        return 'warning';
-      default:
-        return 'secondary';
+  liveCheckDate(pensioner: Pensioner | null): Date {
+    const recent = new Date(2026, 8, 15, 10, 30);
+
+    if (!pensioner || pensioner.approvalStatus === 'ACTIVE') {
+      return recent;
     }
+
+    const monthsAgo = pensioner.id % 2 === 0 ? 2 : 3;
+    const inactive = new Date(recent);
+    inactive.setMonth(inactive.getMonth() - monthsAgo);
+    return inactive;
   }
 
   exportExcel(): void {

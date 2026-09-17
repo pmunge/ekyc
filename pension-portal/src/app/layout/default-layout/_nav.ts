@@ -65,11 +65,6 @@ export const navItems: INavData[] = [
         url: '/profiles',
         iconComponent: { name: 'descriptionSolid' }
       },
-      {
-        name: 'Permissions',
-        url: '/permissions',
-        iconComponent: { name: 'lockLockedSolid' }
-      }
     ]
   },
 

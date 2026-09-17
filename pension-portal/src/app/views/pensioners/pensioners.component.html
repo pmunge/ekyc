@@ -90,8 +90,8 @@
                         <button (click)="viewDetails(pensioner)" cButton color="secondary" size="sm" type="button" variant="outline">
                           View
                         </button>
-                        <button (click)="viewLastTransaction(pensioner)" cButton color="info" size="sm" type="button" variant="outline">
-                          Transaction
+                        <button (click)="viewLiveCheck(pensioner)" cButton color="info" size="sm" type="button" variant="outline">
+                          Live
                         </button>
                       </div>
                     </td>
@@ -235,11 +235,24 @@
   </c-modal-body>
 </c-modal>
 
-<c-modal [(visible)]="lastTransactionVisible" alignment="center">
+<c-modal [(visible)]="liveCheckVisible" alignment="center">
   <c-modal-header>
-    <h5 cModalTitle>Last transaction</h5>
+    <h5 cModalTitle>Last Live Check</h5>
   </c-modal-header>
   <c-modal-body>
+    @if (liveCheckPensioner(); as pensioner) {
+      <p class="text-body-secondary">{{ pensioner.fullName }}</p>
+    }
+
+    <dl class="row mb-0">
+      <dt class="col-sm-5">Date</dt>
+      <dd class="col-sm-7">{{ liveCheckDate(liveCheckPensioner()) | date: 'd MMMM yyyy, h:mm a' }}</dd>
+
+      <dt class="col-sm-5">Mode</dt>
+      <dd class="col-sm-7">Face</dd>
+    </dl>
+
+    <!--
     @if (lastTransactionPensioner(); as pensioner) {
       <p class="text-body-secondary">{{ pensioner.fullName }}</p>
     }
@@ -251,10 +264,11 @@
     @if (lastTransactionLoading()) {
       <div class="d-flex justify-content-center py-4">
         <c-spinner color="primary" />
+        <p>Last Live Check</p>
       </div>
     } @else if (lastTransaction(); as transaction) {
       <dl class="row mb-0">
-        <dt class="col-sm-5">Reference</dt>
+        <dt class="col-sm-5">Status</dt>
         <dd class="col-sm-7">{{ transaction.reference }}</dd>
 
         <dt class="col-sm-5">Date</dt>
@@ -274,5 +288,6 @@
     } @else if (!lastTransactionError()) {
       <p class="text-body-secondary mb-0">This pensioner has no recorded Advances.</p>
     }
+    -->
   </c-modal-body>
 </c-modal>

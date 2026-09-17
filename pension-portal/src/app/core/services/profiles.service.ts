@@ -19,11 +19,12 @@ export class ProfileService {
 
   private http = inject(HttpClient)
   private readonly apiUrl = `${environment.apiUrl}/profiles`
+  private readonly adminProfilesUrl = `${environment.pensionEnrollmentsApiUrl}/admin-profiles`
 
   getProfiles(): Observable<Profile[]> {
     return this.http
-      .get<ApiResponse<Profile[]>>(this.apiUrl)
-      .pipe(map((res) => res.data))
+      .get<ApiResponse<Profile[]> | Profile[]>(this.adminProfilesUrl)
+      .pipe(map((res) => (Array.isArray(res) ? res : res.data)))
   }
   createProfile(profile: Profile): Observable<Profile> {
     return this.http

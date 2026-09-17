@@ -27,7 +27,7 @@ export interface VerifyOtpResponseData {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private readonly baseUrl = environment.apiUrl;
+  private readonly baseUrl = `${environment.pensionEnrollmentsApiUrl}/admin-users`;
 
   private readonly pendingPhoneNumber = signal<string | null>(
     sessionStorage.getItem(PENDING_PHONE_KEY)

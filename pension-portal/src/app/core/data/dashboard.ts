@@ -59,14 +59,11 @@ export const dashboardData: Record<PeriodKey, PeriodData> = {
       completedEnrollments: 11876
     },
     trend: [
-      { period: '1 Sep', enrollments: 28 },
-      { period: '5 Sep', enrollments: 35 },
-      { period: '10 Sep', enrollments: 42 },
-      { period: '15 Sep', enrollments: 38 },
-      { period: '16 Sep', enrollments: 32 },
-      { period: '20 Sep', enrollments: 45 },
-      { period: '25 Sep', enrollments: 51 },
-      { period: '30 Sep', enrollments: 58 }
+      { period: 'Week 1', enrollments: 145 },
+      { period: 'Week 2', enrollments: 168 },
+      { period: 'Week 3', enrollments: 190 },
+      { period: 'Week 4', enrollments: 210 },
+      { period: 'Week 5', enrollments: 129 }
     ]
   }
 };
