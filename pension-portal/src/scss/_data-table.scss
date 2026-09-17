@@ -1,0 +1,72 @@
+// Shared look for every data table across the app (pensioners, transactions,
+// workflows, users, profiles, permissions) so header/cell/hover/empty-state
+// styling stays consistent instead of drifting page to page.
+//
+// Columns are kept tight (small padding/font-size, wrapping headers instead
+// of forcing nowrap) so tables fit within the card width without needing a
+// horizontal scroll on typical desktop/laptop widths. `.table-responsive`
+// on the wrapper remains as a fallback for very narrow viewports only.
+
+.table-card {
+  overflow: hidden;
+}
+
+.search-field {
+  max-width: 440px;
+}
+
+.data-table {
+  min-width: 0;
+  width: 100%;
+  table-layout: auto;
+  margin-bottom: 0;
+  --cui-table-hover-bg: var(--app-blue-soft);
+
+  &.coral-hover {
+    --cui-table-hover-bg: var(--app-coral-soft);
+  }
+
+  thead th {
+    background: var(--app-blue-soft);
+    color: var(--app-navy);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-color: var(--app-line);
+    padding: 8px 8px;
+    white-space: normal;
+  }
+
+  td,
+  th[scope="row"] {
+    padding: 8px 8px;
+    font-size: 13px;
+    border-color: var(--app-line);
+    vertical-align: middle;
+  }
+
+  .badge {
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.actions-cell {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+
+  button {
+    padding: 0.2rem 0.4rem;
+    font-size: 11px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--app-muted);
+  padding: 48px 24px;
+}

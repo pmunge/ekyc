@@ -19,6 +19,7 @@ import {
 import { IconDirective } from '@coreui/icons-angular';
 import { Advance } from '../../core/models/transactions';
 import { TransactionsService } from '../../core/services/transactions.service';
+import { ExportService } from '../../core/services/export.service';
 
 type Period = 'all' | 'hourly' | 'daily' | 'weekly';
 
@@ -54,6 +55,7 @@ const PERIOD_WINDOW_MS: Record<Exclude<Period, 'all'>, number> = {
 })
 export class TransactionsComponent implements OnInit {
   private readonly transactionsService = inject(TransactionsService);
+  private readonly exportService = inject(ExportService);
   private readonly fb = inject(FormBuilder);
 
   readonly pageSizeOptions = [5, 10, 25];
@@ -183,5 +185,43 @@ export class TransactionsComponent implements OnInit {
 
     const elapsed = Date.now() - new Date(createdAt).getTime();
     return elapsed <= PERIOD_WINDOW_MS[period];
+  }
+
+  exportExcel(): void {
+    this.exportService.exportToExcel(this.buildExportRows(), 'transactions');
+  }
+
+  exportPdf(): void {
+    this.exportService.exportToPdf(this.buildExportRows(), this.exportColumns, 'transactions', 'Transactions');
+  }
+
+  private readonly exportColumns = [
+    'date',
+    'time',
+    'reference',
+    'pensioner',
+    'pensionNumber',
+    'amount',
+    'reason',
+    'status',
+    'requestedBy',
+  ];
+
+  private buildExportRows(): Record<string, string | number>[] {
+    return this.filteredTransactions().map((transaction) => {
+      const createdAt = new Date(transaction.createdAt);
+
+      return {
+        date: createdAt.toLocaleDateString(),
+        time: createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        reference: transaction.reference,
+        pensioner: transaction.pensionerName,
+        pensionNumber: transaction.pensionNumber,
+        amount: transaction.amount,
+        reason: transaction.reason,
+        status: transaction.status,
+        requestedBy: transaction.requestedByName,
+      };
+    });
   }
 }

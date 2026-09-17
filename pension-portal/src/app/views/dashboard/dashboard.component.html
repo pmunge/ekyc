@@ -1,47 +1,47 @@
 <c-row class="g-4">
-  <c-col sm="6" xl="3">
-    <c-widget-stat-a color="primary" title="Total Pensioners">
+  <c-col sm="6" xl="3" class="summary-card">
+    <c-widget-stat-a title="Total Pensioners">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ stats().totalPensioners | number }}
       </ng-template>
       <ng-template cTemplateId="widgetChartTemplate">
-        <div class="mt-3 mx-3 text-white-50">
+        <div class="mt-3 mx-3 text-body-secondary">
           <svg cIcon name="cilPeople" size="xl"></svg>
         </div>
       </ng-template>
     </c-widget-stat-a>
   </c-col>
-  <c-col sm="6" xl="3">
-    <c-widget-stat-a color="info" title="New Enrollments">
+  <c-col sm="6" xl="3" class="summary-card">
+    <c-widget-stat-a title="New Enrollments">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ stats().newEnrollments | number }}
       </ng-template>
       <ng-template cTemplateId="widgetChartTemplate">
-        <div class="mt-3 mx-3 text-white-50">
+        <div class="mt-3 mx-3 text-body-secondary">
           <svg cIcon name="cilUserFollow" size="xl"></svg>
         </div>
       </ng-template>
     </c-widget-stat-a>
   </c-col>
-  <c-col sm="6" xl="3">
-    <c-widget-stat-a color="warning" title="Pending Enrollments">
+  <c-col sm="6" xl="3" class="summary-card">
+    <c-widget-stat-a title="Pending Enrollments">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ stats().pendingEnrollments | number }}
       </ng-template>
       <ng-template cTemplateId="widgetChartTemplate">
-        <div class="mt-3 mx-3 text-white-50">
+        <div class="mt-3 mx-3 text-body-secondary">
           <svg cIcon name="cilTask" size="xl"></svg>
         </div>
       </ng-template>
     </c-widget-stat-a>
   </c-col>
-  <c-col sm="6" xl="3">
-    <c-widget-stat-a color="success" title="Completed Enrollments">
+  <c-col sm="6" xl="3" class="summary-card">
+    <c-widget-stat-a title="Completed Enrollments">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ stats().completedEnrollments | number }}
       </ng-template>
       <ng-template cTemplateId="widgetChartTemplate">
-        <div class="mt-3 mx-3 text-white-50">
+        <div class="mt-3 mx-3 text-body-secondary">
           <svg cIcon name="cilCheck" size="xl"></svg>
         </div>
       </ng-template>
@@ -78,10 +78,12 @@
         </form>
       </c-col>
     </c-row>
-    <c-chart [data]="mainChart.data" [height]="300" [style.marginTop.px]="40" [options]="mainChart.options"
-      [type]="mainChart.type" (chartRef)="handleChartRef($event)">
-      Main chart
-    </c-chart>
+    <div class="line-chart mt-3">
+      <c-chart [data]="mainChart.data" [options]="mainChart.options" [type]="mainChart.type"
+        (chartRef)="handleChartRef($event)">
+        Main chart
+      </c-chart>
+    </div>
   </c-card-body>
   <c-card-footer>
     <c-row class="text-center mb-2" [xl]="3" [sm]="3" [xs]="1" [gutter]="4">

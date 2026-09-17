@@ -3,10 +3,11 @@
 // Import styles with default layout.
 @use "@coreui/coreui/scss/coreui" as * with (
   $enable-deprecation-messages: false,
-  $primary: #30497D,
-  $secondary: #455B8A,
-  $dark: #253C6D,
-  $warning: #F2842F
+  $primary: #0C67C8,
+  $secondary: #27AAE1,
+  $dark: #003C7A,
+  $warning: #D49B35,
+  $font-family-sans-serif: ("Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")
 );
 
 // Import Chart.js custom tooltips styles
@@ -14,6 +15,7 @@
 
 // Custom styles for this theme
 @use "theme";
+@use "data-table";
 
 // Some temp fixes
 //@use "fixes";

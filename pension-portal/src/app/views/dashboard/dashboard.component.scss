@@ -4,4 +4,49 @@
       font-size: x-small;
     }
   }
+
+  .line-chart {
+    height: 280px;
+
+    @media (max-width: 991.98px) {
+      height: 260px;
+    }
+
+    @media (max-width: 575.98px) {
+      height: 220px;
+    }
+  }
+
+  ::ng-deep {
+    .summary-card {
+      .card {
+        border-top: 4px solid var(--app-navy);
+      }
+
+      &:nth-child(2) .card {
+        border-top-color: var(--app-sky-blue);
+      }
+
+      &:nth-child(3) .card {
+        border-top-color: var(--app-blue);
+      }
+
+      &:nth-child(4) .card {
+        border-top-color: var(--app-coral);
+      }
+
+      .card-body {
+        .fs-4.fw-semibold {
+          font-size: 26px;
+          font-weight: 600;
+          color: var(--app-blue);
+        }
+
+        > div > div:last-child {
+          font-size: 14px;
+          color: #555;
+        }
+      }
+    }
+  }
 }

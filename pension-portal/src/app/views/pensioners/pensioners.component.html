@@ -1,6 +1,6 @@
 <c-row>
   <c-col xs="12">
-    <c-card class="mb-4">
+    <c-card class="mb-4 table-card">
       <c-card-header class="d-flex align-items-center justify-content-between">
         <strong>Pensioners</strong>
         <span class="text-body-secondary small">{{ filteredPensioners().length }} record(s)</span>
@@ -8,7 +8,7 @@
       <c-card-body>
         <form [formGroup]="searchForm" class="row row-cols-lg-auto g-2 align-items-center mb-3">
           <div class="col-12">
-            <c-input-group>
+            <c-input-group class="search-field">
               <span cInputGroupText>
                 <svg cIcon name="cilSearch" size="sm"></svg>
               </span>
@@ -25,6 +25,21 @@
               Clear
             </button>
           </div>
+          <div class="col-12 ms-lg-auto">
+            <button (click)="exportExcel()" cButton color="success" type="button">
+              Excel
+            </button>
+          </div>
+          <div class="col-12">
+            <button (click)="exportPdf()" cButton color="info" type="button">
+              PDF
+            </button>
+          </div>
+          <div class="col-12">
+            <button (click)="createVisible.set(true)" cButton color="primary" type="button">
+              Add pensioner
+            </button>
+          </div>
         </form>
 
         @if (errorMessage()) {
@@ -37,7 +52,7 @@
           </div>
         } @else {
           <div class="table-responsive">
-            <table [hover]="true" cTable>
+            <table [hover]="true" cTable class="data-table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -48,6 +63,7 @@
                   <th scope="col">Phone Number</th>
                   <th scope="col">Status</th>
                   <th scope="col">Approval Status</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -69,10 +85,20 @@
                         {{ pensioner.approvalStatus }}
                       </c-badge>
                     </td>
+                    <td>
+                      <div class="d-flex actions-cell">
+                        <button (click)="viewDetails(pensioner)" cButton color="secondary" size="sm" type="button" variant="outline">
+                          View
+                        </button>
+                        <button (click)="viewLastTransaction(pensioner)" cButton color="info" size="sm" type="button" variant="outline">
+                          Transaction
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 } @empty {
                   <tr>
-                    <td class="text-center text-body-secondary py-4" colspan="8">
+                    <td class="empty-state" colspan="9">
                       No pensioners found.
                     </td>
                   </tr>
@@ -125,3 +151,128 @@
     </c-card>
   </c-col>
 </c-row>
+
+<c-modal [(visible)]="createVisible" alignment="center">
+  <c-modal-header>
+    <h5 cModalTitle>Add pensioner</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <app-pensioner-form (cancelled)="createVisible.set(false)" (created)="onPensionerCreated()" />
+  </c-modal-body>
+</c-modal>
+
+<c-modal [(visible)]="detailsVisible" alignment="center">
+  <c-modal-header>
+    <h5 cModalTitle>Pensioner details</h5>
+  </c-modal-header>
+  <c-modal-body>
+    @if (detailsError()) {
+      <div class="alert alert-danger" role="alert">{{ detailsError() }}</div>
+    }
+
+    @if (detailsLoading()) {
+      <div class="d-flex justify-content-center py-4">
+        <c-spinner color="primary" />
+      </div>
+    } @else if (selectedPensioner(); as pensioner) {
+      @if (pensioner.photoUrl || pensioner.photoBase64) {
+        <div class="text-center mb-3">
+          <img [src]="pensioner.photoUrl || pensioner.photoBase64" alt="Pensioner photo" class="rounded" style="max-height: 120px;">
+        </div>
+      }
+
+      <dl class="row mb-0">
+        <dt class="col-sm-5">Full name</dt>
+        <dd class="col-sm-7">{{ pensioner.title }} {{ pensioner.fullName }}</dd>
+
+        <dt class="col-sm-5">National ID</dt>
+        <dd class="col-sm-7">{{ pensioner.nationalId }}</dd>
+
+        <dt class="col-sm-5">KRA PIN</dt>
+        <dd class="col-sm-7">{{ pensioner.kraPin || '—' }}</dd>
+
+        <dt class="col-sm-5">Date of birth</dt>
+        <dd class="col-sm-7">{{ pensioner.dateOfBirth || '—' }}</dd>
+
+        <dt class="col-sm-5">Pension number</dt>
+        <dd class="col-sm-7">{{ pensioner.pensionNumber || '—' }}</dd>
+
+        <dt class="col-sm-5">Phone number</dt>
+        <dd class="col-sm-7">{{ pensioner.phoneNumber }}</dd>
+
+        <dt class="col-sm-5">Email</dt>
+        <dd class="col-sm-7">{{ pensioner.emailAddress || '—' }}</dd>
+
+        <dt class="col-sm-5">Bank name</dt>
+        <dd class="col-sm-7">{{ pensioner.bankName || '—' }}</dd>
+
+        <dt class="col-sm-5">Account holder</dt>
+        <dd class="col-sm-7">{{ pensioner.accountHolderName || '—' }}</dd>
+
+        <dt class="col-sm-5">Account number</dt>
+        <dd class="col-sm-7">{{ pensioner.accountNumber || '—' }}</dd>
+
+        <dt class="col-sm-5">M-Pesa number</dt>
+        <dd class="col-sm-7">{{ pensioner.mpesaNumber || '—' }}</dd>
+
+        <dt class="col-sm-5">Role</dt>
+        <dd class="col-sm-7">{{ pensioner.role || '—' }}</dd>
+
+        <dt class="col-sm-5">Status</dt>
+        <dd class="col-sm-7">
+          <c-badge [color]="pensioner.status === 'ALIVE' ? 'success' : 'secondary'">{{ pensioner.status }}</c-badge>
+        </dd>
+
+        <dt class="col-sm-5">Approval status</dt>
+        <dd class="col-sm-7">
+          <c-badge [color]="pensioner.approvalStatus === 'ACTIVE' ? 'success' : 'warning'">{{ pensioner.approvalStatus }}</c-badge>
+        </dd>
+
+        <dt class="col-sm-5">Enrolled by</dt>
+        <dd class="col-sm-7">{{ pensioner.enrolledByPensionName || '—' }}</dd>
+      </dl>
+    }
+  </c-modal-body>
+</c-modal>
+
+<c-modal [(visible)]="lastTransactionVisible" alignment="center">
+  <c-modal-header>
+    <h5 cModalTitle>Last transaction</h5>
+  </c-modal-header>
+  <c-modal-body>
+    @if (lastTransactionPensioner(); as pensioner) {
+      <p class="text-body-secondary">{{ pensioner.fullName }}</p>
+    }
+
+    @if (lastTransactionError()) {
+      <div class="alert alert-danger" role="alert">{{ lastTransactionError() }}</div>
+    }
+
+    @if (lastTransactionLoading()) {
+      <div class="d-flex justify-content-center py-4">
+        <c-spinner color="primary" />
+      </div>
+    } @else if (lastTransaction(); as transaction) {
+      <dl class="row mb-0">
+        <dt class="col-sm-5">Reference</dt>
+        <dd class="col-sm-7">{{ transaction.reference }}</dd>
+
+        <dt class="col-sm-5">Date</dt>
+        <dd class="col-sm-7">{{ transaction.createdAt | date: 'medium' }}</dd>
+
+        <dt class="col-sm-5">Amount</dt>
+        <dd class="col-sm-7">{{ transaction.amount | number: '1.2-2' }}</dd>
+
+        <dt class="col-sm-5">Status</dt>
+        <dd class="col-sm-7">
+          <c-badge [color]="transactionStatusColor(transaction.status)">{{ transaction.status }}</c-badge>
+        </dd>
+
+        <dt class="col-sm-5">Reason</dt>
+        <dd class="col-sm-7">{{ transaction.reason || '—' }}</dd>
+      </dl>
+    } @else if (!lastTransactionError()) {
+      <p class="text-body-secondary mb-0">This pensioner has no recorded Advances.</p>
+    }
+  </c-modal-body>
+</c-modal>

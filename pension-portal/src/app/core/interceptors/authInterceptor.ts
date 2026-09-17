@@ -11,7 +11,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const isApiRequest =
     req.url.startsWith(environment.apiUrl) ||
     req.url.startsWith(environment.adminApiUrl) ||
-    req.url.startsWith(environment.advancesApiUrl);
+    req.url.startsWith(environment.advancesApiUrl) ||
+    req.url.startsWith(environment.pensionEnrollmentsApiUrl);
 
   if (!token || !isApiRequest) {
     return next(req);

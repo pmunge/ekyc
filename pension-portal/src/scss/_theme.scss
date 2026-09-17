@@ -1,8 +1,29 @@
 @use "@coreui/coreui/scss/mixins/transition" as *;
 @use "@coreui/coreui/scss/mixins/color-mode" as *;
 
+:root {
+  --app-sky-blue: #27AAE1;
+  --app-royal-blue: #0C67C8;
+  --app-navy: #003C7A;
+  --app-gold: #D49B35;
+  --app-charcoal: #333333;
+  --app-indigo: var(--app-royal-blue);
+  --app-blue: var(--app-royal-blue);
+  --app-coral: var(--app-gold);
+  --app-blue-soft: #E7F6FD;
+  --app-coral-soft: #FFF7E8;
+  --app-surface: #F7FBFE;
+  --app-line: #D9E8F2;
+  --app-muted: #52677B;
+  --app-status-success-bg: #C4F7CA;
+  --app-status-success-color: #14532D;
+  --app-status-pending-bg: #FFC900;
+  --app-status-pending-color: #6B4E00;
+}
+
 body {
-  background-color: var(--cui-tertiary-bg);
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--app-surface);
 }
 
 .wrapper {
@@ -22,14 +43,22 @@ body {
   --cui-sidebar-brand-bg: #fff;
 }
 
+.sidebar-nav {
+  --cui-sidebar-nav-link-icon-color: #000;
+
+  .nav-group-items {
+    --cui-sidebar-nav-group-items-padding-x: 1rem;
+  }
+}
+
 .sidebar-nav .nav-link.active {
-  --cui-sidebar-nav-link-active-color: #253C6D;
-  --cui-sidebar-nav-link-active-bg: rgba(37, 60, 109, 0.1);
-  --cui-sidebar-nav-link-active-icon-color: #253C6D;
+  --cui-sidebar-nav-link-active-color: var(--app-royal-blue);
+  --cui-sidebar-nav-link-active-bg: var(--app-blue-soft);
+  --cui-sidebar-nav-link-active-icon-color: var(--app-royal-blue);
 }
 
 .header {
-  --cui-header-bg: #30497D;
+  --cui-header-bg: #253C6D;
   --cui-header-color: #fff;
   --cui-header-hover-color: rgba(255, 255, 255, 0.85);
   --cui-header-active-color: #fff;
@@ -95,6 +124,18 @@ body {
 
 .footer {
   min-height: calc(3rem + 1px); // stylelint-disable-line function-disallowed-list
+}
+
+// Soft, readable undertones for status badges instead of Bootstrap's
+// saturated bg-success/bg-warning + forced white badge text.
+.badge.bg-success {
+  --cui-badge-color: var(--app-status-success-color);
+  background-color: var(--app-status-success-bg) !important;
+}
+
+.badge.bg-warning {
+  --cui-badge-color: var(--app-status-pending-color);
+  background-color: var(--app-status-pending-bg) !important;
 }
 
 @include color-mode(dark) {

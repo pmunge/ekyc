@@ -11,6 +11,11 @@ export interface IChartProps {
   [propName: string]: any;
 }
 
+export const PRODUCT_COLORS = ['#0C67C8', '#27AAE1', '#D49B35', '#003C7A'];
+
+const countFormatter = new Intl.NumberFormat('en-US');
+const compactFormatter = new Intl.NumberFormat('en-US', { notation: 'compact' });
+
 @Injectable({
   providedIn: 'any'
 })
@@ -19,34 +24,52 @@ export class DashboardChartsData {
     this.buildChart('Day');
   }
 
-  public mainChart: IChartProps = { type: 'bar' };
+  public mainChart: IChartProps = { type: 'line' };
 
   buildChart(period: PeriodKey): void {
-    const brandPrimary = getStyle('--cui-primary') ?? '#30497D';
-    const brandPrimaryBg = `rgba(${getStyle('--cui-primary-rgb')}, .2)`;
-
     const { trend } = dashboardData[period];
+    const color = PRODUCT_COLORS[0 % PRODUCT_COLORS.length];
 
-    this.mainChart.type = 'bar';
+    this.mainChart.type = 'line';
     this.mainChart.data = {
       labels: trend.map((point) => point.period),
       datasets: [
         {
           label: 'Enrollments',
           data: trend.map((point) => point.enrollments),
-          backgroundColor: brandPrimaryBg,
-          borderColor: brandPrimary,
+          borderColor: color,
+          backgroundColor: color,
+          pointBackgroundColor: color,
+          fill: false,
+          tension: 0,
           borderWidth: 2,
-          borderRadius: 4
+          pointRadius: 3,
+          pointHoverRadius: 5
         }
       ]
     };
 
     this.mainChart.options = {
       maintainAspectRatio: false,
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
       plugins: {
         legend: {
-          display: false
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            boxWidth: 8,
+            padding: 16,
+            font: { size: 11 }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx: any) => `${countFormatter.format(Number(ctx.parsed.y) || 0)} enrollments`
+          }
         }
       },
       scales: this.getScales()
@@ -54,30 +77,33 @@ export class DashboardChartsData {
   }
 
   getScales(): ScaleOptions<any> {
-    const colorBorderTranslucent = getStyle('--cui-border-color-translucent');
     const colorBody = getStyle('--cui-body-color');
 
     return {
       x: {
         grid: {
-          color: colorBorderTranslucent,
-          drawOnChartArea: false
+          display: false
         },
         ticks: {
-          color: colorBody
+          color: colorBody,
+          autoSkip: true,
+          maxTicksLimit: 8,
+          maxRotation: 0,
+          minRotation: 0
         }
       },
       y: {
+        beginAtZero: true,
         border: {
-          color: colorBorderTranslucent
+          color: 'rgba(0, 60, 122, 0.08)'
         },
         grid: {
-          color: colorBorderTranslucent
+          color: 'rgba(0, 60, 122, 0.08)'
         },
-        beginAtZero: true,
         ticks: {
           color: colorBody,
-          maxTicksLimit: 6
+          maxTicksLimit: 6,
+          callback: (value: string | number) => compactFormatter.format(Number(value))
         }
       }
     };

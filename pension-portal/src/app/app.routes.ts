@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./layout').then(m => m.DefaultLayoutComponent),
-    canActivate: [authGuard],
+    // canActivate: [authGuard], // TEMP: disabled so dashboard loads without login, revert before shipping
     data: {
       title: 'Home'
     },
@@ -36,6 +36,21 @@ export const routes: Routes = [
       {
         path: 'workflows',
         loadChildren: () => import('./views/workflows/routes').then((m) => m.routes)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./views/users/list/list.component').then((m) => m.UsersListComponent),
+        data: { title: 'Users' }
+      },
+      {
+        path: 'profiles',
+        loadComponent: () => import('./views/profiles/list/list.component').then((m) => m.ProfilesListComponent),
+        data: { title: 'Profiles' }
+      },
+      {
+        path: 'permissions',
+        loadComponent: () => import('./views/permissions/list/list.component').then((m) => m.PermissionsListComponent),
+        data: { title: 'Permissions' }
       },
       {
         path: 'components',

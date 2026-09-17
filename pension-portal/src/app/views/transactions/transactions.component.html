@@ -1,14 +1,14 @@
 <c-row>
   <c-col xs="12">
-    <c-card class="mb-4">
+    <c-card class="mb-4 table-card">
       <c-card-header class="d-flex align-items-center justify-content-between">
-        <strong>Transactions</strong>
+        <strong>Advances</strong>
         <span class="text-body-secondary small">{{ filteredTransactions().length }} record(s)</span>
       </c-card-header>
       <c-card-body>
         <form [formGroup]="filterForm" class="row row-cols-lg-auto g-2 align-items-center mb-3">
           <div class="col-12">
-            <c-input-group>
+            <c-input-group class="search-field">
               <span cInputGroupText>
                 <svg cIcon name="cilSearch" size="sm"></svg>
               </span>
@@ -32,6 +32,16 @@
               Clear
             </button>
           </div>
+          <div class="col-12 ms-lg-auto">
+            <button (click)="exportExcel()" cButton color="success" type="button">
+              Excel
+            </button>
+          </div>
+          <div class="col-12">
+            <button (click)="exportPdf()" cButton color="info" type="button">
+              PDF
+            </button>
+          </div>
         </form>
 
         @if (errorMessage()) {
@@ -44,7 +54,7 @@
           </div>
         } @else {
           <div class="table-responsive">
-            <table [hover]="true" cTable>
+            <table [hover]="true" cTable class="data-table coral-hover txn-table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -79,8 +89,8 @@
                   </tr>
                 } @empty {
                   <tr>
-                    <td class="text-center text-body-secondary py-4" colspan="10">
-                      No transactions found.
+                    <td class="empty-state" colspan="10">
+                      No advances found.
                     </td>
                   </tr>
                 }

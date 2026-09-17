@@ -1,0 +1,132 @@
+<form [formGroup]="pensionerForm" (ngSubmit)="save()" class="row g-3">
+  @if (errorMessage()) {
+    <div class="col-12">
+      <div class="alert alert-danger mb-0">{{ errorMessage() }}</div>
+    </div>
+  }
+
+  <div class="col-md-6">
+    <label class="form-label" for="title">Title</label>
+    <select cSelect id="title" formControlName="title"
+      [class.is-invalid]="pensionerForm.controls.title.touched && pensionerForm.controls.title.invalid">
+      @for (option of titleOptions; track option) {
+        <option [value]="option">{{ option }}</option>
+      }
+    </select>
+    <div class="invalid-feedback">Title is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="firstName">First name</label>
+    <input cFormControl id="firstName" formControlName="firstName"
+      [class.is-invalid]="pensionerForm.controls.firstName.touched && pensionerForm.controls.firstName.invalid">
+    <div class="invalid-feedback">First name is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="otherNames">Other names</label>
+    <input cFormControl id="otherNames" formControlName="otherNames"
+      [class.is-invalid]="pensionerForm.controls.otherNames.touched && pensionerForm.controls.otherNames.invalid">
+    <div class="invalid-feedback">Other names are required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="nationalId">National ID</label>
+    <input cFormControl id="nationalId" formControlName="nationalId"
+      [class.is-invalid]="pensionerForm.controls.nationalId.touched && pensionerForm.controls.nationalId.invalid">
+    <div class="invalid-feedback">National ID is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="kraPin">KRA PIN</label>
+    <input cFormControl id="kraPin" formControlName="kraPin">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="dateOfBirth">Date of birth</label>
+    <input cFormControl id="dateOfBirth" type="date" formControlName="dateOfBirth"
+      [class.is-invalid]="pensionerForm.controls.dateOfBirth.touched && pensionerForm.controls.dateOfBirth.invalid">
+    <div class="invalid-feedback">Date of birth is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="emailAddress">Email</label>
+    <input cFormControl id="emailAddress" type="email" formControlName="emailAddress"
+      [class.is-invalid]="pensionerForm.controls.emailAddress.touched && pensionerForm.controls.emailAddress.invalid">
+    <div class="invalid-feedback">Enter a valid email address.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="phoneNumber">Phone number</label>
+    <input cFormControl id="phoneNumber" formControlName="phoneNumber"
+      [class.is-invalid]="pensionerForm.controls.phoneNumber.touched && pensionerForm.controls.phoneNumber.invalid">
+    <div class="invalid-feedback">Phone number is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="pensionNumber">Pension number</label>
+    <input cFormControl id="pensionNumber" formControlName="pensionNumber"
+      [class.is-invalid]="pensionerForm.controls.pensionNumber.touched && pensionerForm.controls.pensionNumber.invalid">
+    <div class="invalid-feedback">Pension number is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="bankName">Bank name</label>
+    <input cFormControl id="bankName" formControlName="bankName"
+      [class.is-invalid]="pensionerForm.controls.bankName.touched && pensionerForm.controls.bankName.invalid">
+    <div class="invalid-feedback">Bank name is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="accountHolderName">Account holder name</label>
+    <input cFormControl id="accountHolderName" formControlName="accountHolderName"
+      [class.is-invalid]="pensionerForm.controls.accountHolderName.touched && pensionerForm.controls.accountHolderName.invalid">
+    <div class="invalid-feedback">Account holder name is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="accountNumber">Account number</label>
+    <input cFormControl id="accountNumber" formControlName="accountNumber"
+      [class.is-invalid]="pensionerForm.controls.accountNumber.touched && pensionerForm.controls.accountNumber.invalid">
+    <div class="invalid-feedback">Account number is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="mpesaNumber">M-Pesa number</label>
+    <input cFormControl id="mpesaNumber" formControlName="mpesaNumber"
+      [class.is-invalid]="pensionerForm.controls.mpesaNumber.touched && pensionerForm.controls.mpesaNumber.invalid">
+    <div class="invalid-feedback">M-Pesa number is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="password">Password</label>
+    <input cFormControl id="password" type="password" formControlName="password"
+      [class.is-invalid]="pensionerForm.controls.password.touched && pensionerForm.controls.password.invalid">
+    <div class="invalid-feedback">Password is required.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="pin">PIN</label>
+    <input cFormControl id="pin" type="password" inputmode="numeric" maxlength="4" formControlName="pin"
+      [class.is-invalid]="pensionerForm.controls.pin.touched && pensionerForm.controls.pin.invalid">
+    <div class="invalid-feedback">Enter a 4-digit PIN.</div>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label" for="photo">Photo</label>
+    <input class="form-control" id="photo" type="file" accept="image/*" (change)="onPhotoSelected($event)">
+  </div>
+
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <button cButton type="button" color="secondary" variant="outline" (click)="cancelled.emit()" [disabled]="saving()">
+      Cancel
+    </button>
+    <button cButton type="submit" color="primary" [disabled]="saving()">
+      @if (saving()) {
+        <c-spinner size="sm" />
+      } @else {
+        Add pensioner
+      }
+    </button>
+  </div>
+</form>

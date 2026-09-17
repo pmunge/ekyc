@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Pensioner } from '../models/pensioners';
+import { CreatePensionerPayload, Pensioner } from '../models/pensioners';
 import { environment } from '../../../environments/environment';
 
 interface ApiResponse<T> {
@@ -23,5 +23,17 @@ export class PensionsService {
     return this.http
       .get<ApiResponse<Pensioner[]> | Pensioner[]>(this.apiUrl)
       .pipe(map((res) => (Array.isArray(res) ? res : res.data)));
+  }
+
+  createPensioner(payload: CreatePensionerPayload): Observable<Pensioner> {
+    return this.http
+      .post<ApiResponse<Pensioner> | Pensioner>(`${environment.adminApiUrl}/enroll`, payload)
+      .pipe(map((res) => ('data' in res ? res.data : res)));
+  }
+
+  getPensionerByNationalId(nationalId: string): Observable<Pensioner> {
+    return this.http
+      .get<ApiResponse<Pensioner> | Pensioner>(`${environment.pensionEnrollmentsApiUrl}/by-national-id/${nationalId}`)
+      .pipe(map((res) => ('data' in res ? res.data : res)));
   }
 }

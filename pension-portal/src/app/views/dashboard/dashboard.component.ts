@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
   readonly #renderer: Renderer2 = inject(Renderer2);
   readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
 
-  public mainChart: IChartProps = { type: 'bar' };
+  public mainChart: IChartProps = { type: 'line' };
   public mainChartRef: WritableSignal<any> = signal(undefined);
   #mainChartRefEffect = effect(() => {
     if (this.mainChartRef()) {

@@ -108,6 +108,14 @@ import { linkedinBadge } from './linkedin-badge';
 import { twitterX } from './twitter-x';
 import { logo } from './logo';
 import { signet } from './signet';
+import { dashboardSolid } from './dashboard-solid';
+import { peopleSolid } from './people-solid';
+import { userSolid } from './user-solid';
+import { dollarSolid } from './dollar-solid';
+import { shieldCheckSolid } from './shield-check-solid';
+import { checkCircleSolid } from './check-circle-solid';
+import { descriptionSolid } from './description-solid';
+import { lockLockedSolid } from './lock-locked-solid';
 
 export const iconSubset = {
   cibCcAmex,
@@ -216,7 +224,15 @@ export const iconSubset = {
   linkedinBadge,
   logo,
   signet,
-  twitterX
+  twitterX,
+  dashboardSolid,
+  peopleSolid,
+  userSolid,
+  dollarSolid,
+  shieldCheckSolid,
+  checkCircleSolid,
+  descriptionSolid,
+  lockLockedSolid
 };
 
 export enum IconSubset {

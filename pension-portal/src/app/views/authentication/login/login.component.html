@@ -7,14 +7,29 @@
     </header>
 
     <div class="form-wrap">
-      <img src="assets/images/iCEA_PAY.png" alt="ICEA Pay" class="product-logo">
-      <p class="subtitle">Sign in to access the ICEA PAY</p>
+      <img src="assets/images/logo1.png" alt="ICEA Pay" class="product-logo">
+      <p class="subtitle">Sign in to access the eKYC</p>
 
       <form [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form" novalidate>
 
         <label class="field">
+          <span class="field-label">Country</span>
+          <select formControlName="countryCode" aria-label="Country">
+            @for (country of countries(); track country.code) {
+            <option [value]="country.code">{{ country.name }} ({{ country.callingCode }})</option>
+            }
+          </select>
+          @if (loginForm.controls.countryCode.touched && loginForm.controls.countryCode.invalid) {
+          <span class="field-error">Select a country</span>
+          }
+        </label>
+
+        <label class="field">
           <span class="field-label">Phone number</span>
-          <input type="tel" formControlName="phoneNumber" placeholder=" +254*********" autocomplete="tel">
+          <div class="phone-row">
+            <span class="dial-code">{{ selectedCallingCode() }}</span>
+            <input type="tel" formControlName="phoneNumber" placeholder="7********" autocomplete="tel">
+          </div>
           @if (loginForm.controls.phoneNumber.touched && loginForm.controls.phoneNumber.invalid) {
           <span class="field-error">Enter a valid phone number</span>
           }
@@ -46,9 +61,9 @@
     <div class="image-overlay">
       <span class="overlay-top">ICEA LION</span>
       <div class="overlay-bottom">
-        <h2 class="overlay-heading">ICEA PAY</h2>
+        <h2 class="overlay-heading">eKYC</h2>
         <p class="overlay-text">
-          Manage pensioner enrollments, transactions and approvals across the
+          Manage pensioner enrollments, Advances and approvals across the
           group from a single secure dashboard.
         </p>
       </div>

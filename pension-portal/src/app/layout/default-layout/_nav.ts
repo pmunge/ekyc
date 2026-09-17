@@ -3,38 +3,72 @@ import { INavData } from '@coreui/angular';
 export const navItems: INavData[] = [
   {
     name: 'Dashboard',
-    url: '/dashboard',
-    iconComponent: { name: 'cil-speedometer' },
-    badge: {
-      color: 'info',
-      text: 'NEW'
-    }
+    iconComponent: { name: 'dashboardSolid' },
+    children: [
+      {
+        name: 'Dashboard',
+        url: '/dashboard',
+        iconComponent: { name: 'dashboardSolid' }
+      }
+    ]
   },
-  {
-    title: true,
-    name: 'Pension Management'
-  },
+
   {
     name: 'Pensioners',
-    url: '/pensioners',
-    iconComponent: { name: 'cil-people' }
+    iconComponent: { name: 'peopleSolid' },
+    children: [
+      {
+        name: 'Pensioners',
+        url: '/pensioners',
+        iconComponent: { name: 'peopleSolid' }
+      }
+    ]
   },
   {
-    name: 'Transactions',
-    url: '/transactions',
-    iconComponent: { name: 'cil-dollar' }
+    name: 'Advances',
+    iconComponent: { name: 'dollarSolid' },
+    children: [
+      {
+        name: 'Advances',
+        url: '/transactions',
+        iconComponent: { name: 'dollarSolid' }
+      }
+    ]
   },
   {
-    name: 'Workflows',
-    iconComponent: { name: 'cil-task' },
+    name: 'Approvals',
+    iconComponent: { name: 'shieldCheckSolid' },
     children: [
       {
         name: 'Approve Member',
-        url: '/workflows/approve-members'
+        url: '/workflows/approve-members',
+        iconComponent: { name: 'userSolid' }
       },
       {
         name: 'Approve Transaction',
-        url: '/workflows/approve-transactions'
+        url: '/workflows/approve-transactions',
+        iconComponent: { name: 'checkCircleSolid' }
+      }
+    ]
+  },
+  {
+    name: 'Users',
+    iconComponent: { name: 'userSolid' },
+    children: [
+      {
+        name: 'Users',
+        url: '/users',
+        iconComponent: { name: 'userSolid' }
+      },
+      {
+        name: 'Profiles',
+        url: '/profiles',
+        iconComponent: { name: 'descriptionSolid' }
+      },
+      {
+        name: 'Permissions',
+        url: '/permissions',
+        iconComponent: { name: 'lockLockedSolid' }
       }
     ]
   },

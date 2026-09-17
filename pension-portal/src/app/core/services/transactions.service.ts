@@ -24,4 +24,12 @@ export class TransactionsService {
       .get<ApiResponse<Advance[]> | Advance[]>(this.apiUrl)
       .pipe(map((res) => (Array.isArray(res) ? res : res.data)));
   }
+
+  getLastTransactionForEnrollment(enrollmentId: number): Observable<Advance | null> {
+    return this.http
+      .get<ApiResponse<Advance | null> | Advance | null>(
+        `${environment.pensionEnrollmentsApiUrl}/${enrollmentId}/last-transaction`,
+      )
+      .pipe(map((res) => (res && 'data' in res ? res.data : res)));
+  }
 }

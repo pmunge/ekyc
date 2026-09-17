@@ -1,15 +1,10 @@
 <!--sidebar-->
-<c-sidebar
-  #sidebar1="cSidebar"
-  class="d-print-none sidebar sidebar-fixed border-end"
-  colorScheme="light"
-  id="sidebar1"
-  visible
->
-  <c-sidebar-header class="border-bottom">
+<c-sidebar #sidebar1="cSidebar" class="d-print-none sidebar sidebar-fixed border-end" colorScheme="light" id="sidebar1"
+  visible>
+  <c-sidebar-header>
     <c-sidebar-brand [routerLink]="[]">
-      <img alt="ICEA Pay" class="sidebar-brand-full" src="assets/images/loginlogo.png">
-      <img alt="ICEA Pay" class="sidebar-brand-narrow" src="assets/images/loginlogo.png">
+      <img alt="ICEA Pay" class="sidebar-brand-full" src="assets/images/logo1.png">
+      <img alt="ICEA Pay" class="sidebar-brand-narrow" src="assets/images/logo1.png">
     </c-sidebar-brand>
   </c-sidebar-header>
 
@@ -18,21 +13,18 @@
   </ng-scrollbar>
 
   @if (!sidebar1.narrow) {
-    <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable" style="cursor: pointer;">
-      <button cSidebarToggler aria-label="Toggle sidebar fold"></button>
-    </c-sidebar-footer>
+  <c-sidebar-footer cSidebarToggle="sidebar1" class="border-top d-none d-lg-flex" toggle="unfoldable"
+    style="cursor: pointer;">
+    <button cSidebarToggler aria-label="Toggle sidebar fold"></button>
+  </c-sidebar-footer>
   }
 </c-sidebar>
 
 <!--main-->
 <div class="wrapper d-flex flex-column min-vh-100">
   <!--app-header-->
-  <app-default-header
-    [cShadowOnScroll]="'sm'"
-    class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
-    position="sticky"
-    sidebarId="sidebar1"
-  />
+  <app-default-header [cShadowOnScroll]="'sm'" class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
+    position="sticky" sidebarId="sidebar1" />
   <!--app-body-->
   <div class="body flex-grow-1">
     <c-container breakpoint="lg" class="h-auto px-4">
