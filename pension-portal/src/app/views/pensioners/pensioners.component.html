@@ -175,12 +175,6 @@
         <c-spinner color="primary" />
       </div>
     } @else if (selectedPensioner(); as pensioner) {
-      @if (pensioner.photoUrl || pensioner.photoBase64) {
-        <div class="text-center mb-3">
-          <img [src]="pensioner.photoUrl || pensioner.photoBase64" alt="Pensioner photo" class="rounded" style="max-height: 120px;">
-        </div>
-      }
-
       <dl class="row mb-0">
         <dt class="col-sm-5">Full name</dt>
         <dd class="col-sm-7">{{ pensioner.title }} {{ pensioner.fullName }}</dd>
