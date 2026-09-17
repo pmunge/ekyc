@@ -12,6 +12,16 @@ export class UsersListComponent implements OnInit {
   ngOnInit(): void { this.loadUsers(); }
   loadUsers(): void { this.loading.set(true); this.errorMessage.set(''); this.usersService.getStaff().subscribe({ next: users => { this.users.set(users); this.loading.set(false); }, error: () => { this.errorMessage.set('Users could not be loaded.'); this.loading.set(false); } }); }
   onUserCreated(): void { this.createVisible.set(false); this.loadUsers(); }
+
+  /** No deactivate endpoint yet — UI-only action. */
+  deactivateUser(user: Staff): void {
+    console.log('Deactivate user (UI only, no endpoint yet):', user);
+  }
+
+  /** No block endpoint yet — UI-only action. */
+  blockUser(user: Staff): void {
+    console.log('Block user (UI only, no endpoint yet):', user);
+  }
 }
 
 export { UsersListComponent as ListComponent };
